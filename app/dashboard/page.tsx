@@ -104,7 +104,7 @@ export default function DashboardPage() {
       return r.json()
     }
   })
-  const areasDisponibles = (areasData?.data?.porArea || []).map((p: { area: string }) => p.area)
+  const areasDisponibles: string[] = (areasData?.data?.porArea || []).map((p: { area: string }) => p.area)
 
   // Query principal del Dashboard
   const { data: dashboardResult, isLoading: loading, error } = useQuery({
