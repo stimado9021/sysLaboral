@@ -9,6 +9,8 @@ const withPWA = require('next-pwa')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   serverExternalPackages: ['@neondatabase/serverless'],
+  // Silences the Next.js 15 Turbopack warning when using next-pwa
+  turbopack: {},
 }
 
 module.exports = withPWA(nextConfig)
