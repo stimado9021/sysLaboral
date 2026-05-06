@@ -1,0 +1,632 @@
+/* app/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+  /* Fondo y paneles */
+  --bg:           #E5E7EB;
+  --bg-secondary: #3E2723;
+  --panel:        #3E2723;
+  --dim:          #2D1B18; /* Darker brown for dim areas inside panels */
+  --border:       #E5E7EB;
+  --border-light: #D1D5DB;
+
+  /* Sombras */
+  --shadow:    0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+
+  /* Colores semánticos */
+  --primary:      #F97316;
+  --primary-dark: #EA580C;
+  --red:          #EF4444;
+  --orange:       #F97316;
+  --yellow:       #EAB308;
+  --green:        #10B981;
+  --blue:         #3B82F6;
+  --purple:       #8B5CF6;
+
+  /* Texto */
+  --text:           #111827;
+  --text-secondary: #4B5563;
+  --muted:          #9CA3AF;
+
+  /* Tipografía */
+  --font-sans: var(--font-syne), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: var(--font-mono-var), 'JetBrains Mono', Consolas, monospace;
+
+  /* Layout */
+  --topbar-h:   56px;   /* Altura del topbar móvil */
+  --sidebar-w:  220px;  /* Ancho sidebar desktop expandido */
+}
+
+/* Override text colors inside dark panels */
+aside, .card, .topbar, .input-base, .panel-dark {
+  --text:           #ffffff;
+  --text-secondary: #D1D5DB;
+  --muted:          #9CA3AF;
+  color: var(--text);
+}
+
+/* ============================================================
+   RESET Y BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: inherit; }
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+/* ============================================================
+   BACKGROUND GRID
+   ============================================================ */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(51, 65, 85, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(51, 65, 85, 0.12) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ============================================================
+   ANIMACIONES
+   ============================================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes pulse-red {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(230,57,70,0.4); }
+  50%       { box-shadow: 0 0 0 8px rgba(230,57,70,0); }
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-fade-up   { animation: fadeUp    0.4s ease both; }
+.animate-fade-in   { animation: fadeIn    0.3s ease both; }
+.animate-pulse-red { animation: pulse-red 2s infinite; }
+.animate-slide-down{ animation: slideDown 0.25s ease both; }
+
+.delay-1 { animation-delay: 0.05s; }
+.delay-2 { animation-delay: 0.10s; }
+.delay-3 { animation-delay: 0.15s; }
+.delay-4 { animation-delay: 0.20s; }
+.delay-5 { animation-delay: 0.25s; }
+
+/* ============================================================
+   COMPONENTES BASE
+   ============================================================ */
+
+/* Card */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  color: #ffffff; /* Explicitly make text white inside dark brown cards */
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+.card-title {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 14px;
+  color: #ffffff;
+  margin-bottom: 16px;
+}
+
+/* Badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 500;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+.badge-danger  { background: rgba(239,68,68,0.15);  color: var(--red); }
+.badge-success { background: rgba(16,185,129,0.15); color: var(--green); }
+.badge-warning { background: rgba(245,158,11,0.15); color: var(--yellow); }
+.badge-primary { background: rgba(59,130,246,0.15); color: var(--primary); }
+.badge-muted   { background: var(--bg-secondary);   color: var(--muted); }
+
+/* Input */
+.input-base {
+  width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  padding: 12px 16px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input-base:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
+}
+.input-base::placeholder { color: #A8A29E; } /* Lighter gray/brown for dark background */
+
+/* Botones */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn-primary {
+  background: var(--primary);
+  color: #ffffff; /* White text looks cleaner on light mode */
+  font-weight: 600;
+  box-shadow: var(--shadow);
+}
+.btn-primary:hover {
+  background: var(--primary-dark);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.btn-secondary:hover {
+  background: var(--bg-secondary);
+  border-color: var(--muted);
+}
+
+/* Label formulario */
+.form-label {
+  display: block;
+  font-weight: 500;
+  font-size: 14px;
+  color: #E5E7EB; /* Light text for labels inside dark panels */
+  margin-bottom: 8px;
+}
+
+/* KPI card específico */
+.kpi-card {
+  padding: 20px !important;
+}
+
+/* Chart card */
+.chart-card {
+  overflow: hidden;
+}
+
+/* ============================================================
+   LAYOUT — APP SHELL (desktop-first → mobile-override)
+   ============================================================ */
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* TOPBAR (solo móvil/tablet) */
+.topbar {
+  display: none; /* oculto en desktop */
+}
+
+/* MAIN CONTENT AREA */
+.app-main {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg);
+  min-height: 100vh;
+  transition: margin-left 0.3s cubic-bezier(0.4,0,0.2,1);
+  /* En desktop, empuja a la derecha del sidebar */
+  margin-left: var(--sidebar-w, 220px);
+}
+
+.app-content {
+  padding: 32px 32px 48px;
+  max-width: 1400px;
+}
+
+/* ============================================================
+   SIDEBAR — Desktop
+   ============================================================ */
+aside {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 100;
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  color: #ffffff; /* Make text white inside sidebar */
+  transition: width 0.3s cubic-bezier(0.4,0,0.2,1), transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  /* En desktop siempre visible */
+  transform: translateX(0);
+}
+
+/* ============================================================
+   TOPBAR — Estilos (aplicados en tablet/móvil)
+   ============================================================ */
+.topbar-hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.topbar-hamburger:hover { background: rgba(255,255,255,0.05); }
+
+.hamburger-line {
+  display: block;
+  height: 2px;
+  background: #ffffff; /* White icon on dark brown topbar */
+  border-radius: 2px;
+  transition: all 0.25s ease;
+  transform-origin: center;
+}
+/* Animación hamburguesa → X */
+.open-1 { transform: translateY(7px) rotate(45deg); }
+.open-2 { opacity: 0; transform: scaleX(0); }
+.open-3 { transform: translateY(-7px) rotate(-45deg); }
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+.topbar-logo {
+  width: 32px;
+  height: 32px;
+  background: var(--primary);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.topbar-title {
+  font-weight: 700;
+  font-size: 16px;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topbar-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--purple));
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: default;
+  user-select: none;
+}
+
+/* ============================================================
+   BREAKPOINT: TABLET  768px – 1023px
+   ============================================================ */
+@media (max-width: 1023px) {
+
+  /* Topbar visible */
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--topbar-h);
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    padding: 0 16px;
+    z-index: 200;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  /* Sidebar como drawer */
+  aside {
+    transform: translateX(-100%);
+    box-shadow: none;
+  }
+  aside.mobile-open {
+    transform: translateX(0);
+    box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+  }
+
+  /* Main sin offset del sidebar, con espacio para topbar */
+  .app-main {
+    margin-left: 0 !important;
+    padding-top: var(--topbar-h);
+  }
+
+  .app-content {
+    padding: 24px 20px 40px;
+  }
+
+  /* Cards más compactas */
+  .card { padding: 18px; }
+  .kpi-card { padding: 16px !important; }
+}
+
+/* ============================================================
+   BREAKPOINT: MÓVIL  < 768px
+   ============================================================ */
+@media (max-width: 767px) {
+
+  .app-content {
+    padding: 16px 14px 32px;
+  }
+
+  /* Tipografía */
+  h1 { font-size: 20px !important; }
+  h2 { font-size: 17px !important; }
+
+  /* Cards más compactas */
+  .card {
+    padding: 14px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  .card:hover { transform: none; } /* sin hover en touch */
+
+  .kpi-card { padding: 14px !important; }
+
+  /* Botones full width en ciertos contextos */
+  .btn-full-mobile {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Inputs más grandes (mejor táctil) */
+  .input-base {
+    padding: 13px 14px;
+    font-size: 16px; /* evita zoom en iOS */
+  }
+
+  /* ── Formulario stepper ── */
+  .stepper-container {
+    position: sticky;
+    top: var(--topbar-h);
+    z-index: 50;
+    background: var(--bg);
+    width: 100%;
+    overflow-x: auto;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    -webkit-overflow-scrolling: touch;
+  }
+  .stepper-items {
+    display: flex;
+    gap: 4px;
+    min-width: max-content;
+    padding: 0 14px;
+  }
+  .stepper-item {
+    min-width: 60px;
+    padding: 6px 8px !important;
+    font-size: 9px !important;
+  }
+  .stepper-item .step-num {
+    width: 22px; height: 22px;
+    font-size: 10px;
+    margin-bottom: 2px;
+  }
+  .stepper-item .step-title { font-size: 7px; }
+
+  .form-content  { padding: 14px !important; min-height: auto; }
+  .form-header   { flex-direction: column; gap: 10px; padding: 12px 14px !important; }
+  .form-grid     { grid-template-columns: 1fr !important; }
+
+  /* Navegación form */
+  .form-nav {
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 14px !important;
+  }
+  .form-nav .btn { width: 100%; justify-content: center; }
+
+  /* ── Tabla de reportes ── */
+  /* En móvil colapsar en tarjetas */
+  .table-desktop-header { display: none !important; }
+  .table-row-mobile {
+    display: flex !important;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px !important;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── Estado acciones grid ── */
+  .estado-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* ── Acciones correctivas ── */
+  .acciones-list { grid-template-columns: 1fr !important; padding: 12px 14px !important; }
+
+  /* ── Botones de acción agrupados ── */
+  .action-buttons {
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+  }
+  .action-buttons .btn,
+  .action-buttons button,
+  .action-buttons a { width: 100%; justify-content: center; }
+
+  /* Gráficos más cortos */
+  .chart-card .recharts-responsive-container { min-height: 200px; }
+}
+
+/* ============================================================
+   STEPPER — Animación de dots en móvil
+   ============================================================ */
+.form-dots {
+  display: none;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 0;
+}
+@media (max-width: 767px) {
+  .form-dots { display: flex; }
+}
+.form-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: all 0.2s;
+}
+.form-dot.active {
+  background: var(--red);
+  width: 20px;
+  border-radius: 3px;
+}
+
+/* ============================================================
+   TABLA RESPONSIVA — Reportes
+   ============================================================ */
+.reportes-table {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.reportes-table-header {
+  display: grid;
+  grid-template-columns: 60px 100px 1fr 140px 100px 100px 90px 80px;
+  padding: 10px 16px;
+  background: var(--dim);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.reportes-table-row {
+  display: grid;
+  grid-template-columns: 60px 100px 1fr 140px 100px 100px 90px 80px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  align-items: center;
+  transition: background 0.15s;
+}
+.reportes-table-row:hover { background: rgba(255,255,255,0.02); }
+
+/* Tablet: simplificar columnas */
+@media (max-width: 1023px) and (min-width: 768px) {
+  .reportes-table-header,
+  .reportes-table-row {
+    grid-template-columns: 50px 90px 1fr 120px 90px 70px;
+  }
+  /* Ocultar días inc y botón en tablet – se muestra en expand */
+  .reportes-col-dias,
+  .reportes-col-link {
+    display: none;
+  }
+}
+
+/* Móvil: tarjeta por fila */
+@media (max-width: 767px) {
+  .reportes-table-header { display: none; }
+  .reportes-table-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 16px;
+    align-items: flex-start;
+    border-radius: 0;
+  }
+  .reportes-table {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+}
+
+/* ============================================================
+   DETALLE REPORTE — Grid responsivo
+   ============================================================ */
+.reporte-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 767px) {
+  .reporte-grid-2 { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   LOADING SKELETON
+   ============================================================ */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--panel) 25%,
+    var(--border) 50%,
+    var(--panel) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 4px;
+}
