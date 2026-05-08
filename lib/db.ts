@@ -6,10 +6,14 @@
 // ─────────────────────────────────────────────────────────────
 import { neon } from '@neondatabase/serverless'
 
-if (!process.env.POSTGRES_URL) {
-  throw new Error('❌ POSTGRES_URL no está definida en .env.local')
-}
+// Inicializamos la conexión solo si existe la variable,
+// o creamos una función proxy que lance el error al intentar hacer una query.
+// Esto evita que el build ('npm run build') falle en entornos de CI/CD 
+// donde POSTGRES_URL podría no estar definida en el momento de compilar.
+const connectionString = process.env.POSTGRES_URL || ''
 
-// sql es una función tagged template que ejecuta queries de forma segura
-// Ejemplo: await sql`SELECT * FROM accidentes WHERE id = ${id}`
-export const sql = neon(process.env.POSTGRES_URL)
+export const sql = connectionString 
+  ? neon(connectionString) 
+  : ((...args: any[]) => {
+      throw new Error('❌ POSTGRES_URL no está definida en las variables de entorno (.env.local o Vercel)')
+    }) as ReturnType<typeof neon>
